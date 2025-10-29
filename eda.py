@@ -1,5 +1,3 @@
-import os
-import math
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -37,6 +35,12 @@ add_report_line(f"rows: {len(df)}, cols: {len(df.columns)}")
 num_cols = ["actual_price","discounted_price","discount_percentage","rating","rating_count"]
 desc = df[num_cols].describe().T
 add_report_line("\n[Summary Stats]\n" + desc.to_string())
+# rating_count는 nullable 정수일 수 있으므로 분석용 보정
+df["rating_count"] = pd.to_numeric(df["rating_count"], errors="coerce")
+df["rating"] = pd.to_numeric(df["rating"], errors="coerce")
+df["discount_percentage"] = pd.to_numeric(df["discount_percentage"], errors="coerce")
+df["discounted_price"] = pd.to_numeric(df["discounted_price"], errors="coerce")
+df["actual_price"] = pd.to_numeric(df["actual_price"], errors="coerce")
 
 # 제약 체크
 checks = {
@@ -267,6 +271,8 @@ rank_discount = df.sort_values("discount_percentage", ascending=False).head(top_
 df["_value_score"] = (5 - df["rating"]) * 0.0 + df["discounted_price"]  # 필요시 커스터마이즈
 rank_value = df.sort_values(["rating","discounted_price"], ascending=[False, True]).head(top_n)
 rank_value.drop(columns=["_value_score"], inplace=True)
+
+
 
 
 
