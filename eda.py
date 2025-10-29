@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 # =========================
 # 1) 데이터 로드
 # =========================
-df = pd.read_csv('C:/고비어 실습/amazon_cleaned.csv')
+df = pd.read_csv('C:/고비어 실습/amazon_cleaned.csv', encoding='MacRoman')
 
 # 안전 장치: 필수 컬럼 체크
 required_cols = [
@@ -267,5 +267,6 @@ rank_discount = df.sort_values("discount_percentage", ascending=False).head(top_
 df["_value_score"] = (5 - df["rating"]) * 0.0 + df["discounted_price"]  # 필요시 커스터마이즈
 rank_value = df.sort_values(["rating","discounted_price"], ascending=[False, True]).head(top_n)
 rank_value.drop(columns=["_value_score"], inplace=True)
+
 
 
